@@ -1,0 +1,22 @@
+{
+  "name": "ast-code-dup",
+  "version": "1.0.0",
+  "description": "a tool that detects and analyzes duplicated code segments using Abstract Syntax Trees (AST) for accurate and insightful redundancy identification",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tycho457/ast-code-dup.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tycho457/ast-code-dup/issues"
+  },
+  "homepage": "https://github.com/Tycho457/ast-code-dup#readme"
+}
