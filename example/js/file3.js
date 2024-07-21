@@ -11,6 +11,3 @@ function test() {
 function createFile() {
   console.log('create file');
 }
-
-
-
