@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const { parse } = require('@babel/parser');
 const generate = require('@babel/generator').default;
 const traverse = require('@babel/traverse').default;
-const t = require('@babel/types');
+const type = require('@babel/types');
 
 // 解析文件，生成 AST
 function parseFile(filePath) {
@@ -24,7 +24,7 @@ function extractFunctions(ast, filePath) {
             functions.push({ node: path.node, filePath });
         },
         ClassProperty(path) {
-            if (t.isFunctionExpression(path.node.value)) {
+            if (type.isFunctionExpression(path.node.value)) {
                 functions.push({ node: path.node.value, filePath });
             }
         }
@@ -49,13 +49,13 @@ function standardizeIdentifiers(ast) {
 
 // 规范化函数的代码，将所有标识符名替换为统一的名称，并去除空白字符
 function normalizeFunction(funcNode) {
-    const wrappedNode = t.expressionStatement(
-      t.isFunctionDeclaration(funcNode)
-        ? t.functionExpression(null, funcNode.params, funcNode.body)
+    const wrappedNode = type.expressionStatement(
+      type.isFunctionDeclaration(funcNode)
+        ? type.functionExpression(null, funcNode.params, funcNode.body)
         : funcNode
     );
 
-    const funcAst = t.file(t.program([wrappedNode]));
+    const funcAst = type.file(type.program([wrappedNode]));
     standardizeIdentifiers(funcAst);
 
     const { code } = generate(funcAst);
