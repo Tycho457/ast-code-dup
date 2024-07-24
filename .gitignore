@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # ignore report.txt
-report.txt
+.txt

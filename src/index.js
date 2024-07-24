@@ -3,13 +3,14 @@ const path = require('path'); // 用于处理文件路径
 const crypto = require('crypto'); // 用于生成哈希值
 const { parse } = require('@babel/parser');
 const generate = require('@babel/generator').default;
+const traverse = require('@babel/traverse').default;
+const t = require('@babel/types');
 
 // 解析文件，生成 AST
 function parseFile(filePath) {
     const code = fs.readFileSync(filePath, 'utf-8');
     return parse(code, {
         sourceType: 'module',
-        attachComment: false,
         plugins: ['typescript', 'decorators-legacy'],
         loc: true // 保留位置信息
     });
@@ -19,34 +20,57 @@ function parseFile(filePath) {
 function extractFunctions(ast, filePath) {
     const functions = [];
     traverse(ast, {
-        enter: (node) => {
-            // 函数声明、函数表达式或箭头函数
-            if (['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression', 'ClassMethod'].includes(node.type)) {
-                functions.push({ node, filePath });
-            }
-            // 类属性，并且其值是函数表达式
-            else if (node.type === 'ClassProperty' && node.value?.type === 'FunctionExpression') {
-                functions.push({ node: node.value, filePath });
+        FunctionDeclaration(path) {
+            functions.push({ node: path.node, filePath });
+        },
+        FunctionExpression(path) {
+            functions.push({ node: path.node, filePath });
+        },
+        ArrowFunctionExpression(path) {
+            functions.push({ node: path.node, filePath });
+        },
+        ClassMethod(path) {
+            functions.push({ node: path.node, filePath });
+        },
+        ClassProperty(path) {
+            if (path.node.value && path.node.value.type === 'FunctionExpression') {
+                functions.push({ node: path.node.value, filePath });
             }
         }
     });
     return functions;
 }
 
-// 遍历 AST 节点的工具函数
-function traverse(node, visitor) {
-    visitor.enter(node);
-    for (const key in node) {
-        if (node[key] && typeof node[key] === 'object') {
-            traverse(node[key], visitor);
+// 标准化标识符
+function standardizeIdentifiers(ast) {
+    let identifierCount = 0;
+    const identifierMap = new Map();
+
+    traverse(ast, {
+        Identifier(path) {
+            if (!identifierMap.has(path.node.name)) {
+                identifierMap.set(path.node.name, `identifier_${identifierCount++}`);
+            }
+            path.node.name = identifierMap.get(path.node.name);
         }
-    }
-    visitor.leave && visitor.leave(node);
+    });
 }
 
-// 规范化处理
+// 规范化函数的代码，将所有标识符名替换为统一的名称，并去除注释和空白字符
 function normalizeFunction(funcNode) {
-    const { code } = generate(funcNode);
+    let nodeToWrap;
+
+    if (t.isFunctionDeclaration(funcNode)) {
+        nodeToWrap = t.expressionStatement(t.functionExpression(null, funcNode.params, funcNode.body));
+    } else if (t.isFunctionExpression(funcNode) || t.isArrowFunctionExpression(funcNode)) {
+        nodeToWrap = t.expressionStatement(funcNode);
+    } else {
+        throw new Error(`Unsupported function node type: ${funcNode.type}`);
+    }
+
+    const funcAst = t.file(t.program([nodeToWrap]));
+    standardizeIdentifiers(funcAst);
+    const { code } = generate(funcAst, { comments: false });
     return code.replace(/\s+/g, ''); // 去除空白字符
 }
 
@@ -144,4 +168,4 @@ function scanProject(directory, outputFilePath, minOccurrences = 3) {
     generateReport(duplicates, outputFilePath, minOccurrences);
 }
 
-scanProject('example', 'report.txt', 3);
+scanProject('example', 'report.txt', 2);
