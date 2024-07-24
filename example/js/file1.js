@@ -8,6 +8,10 @@ function createFile() {
   console.log('create file');
 }
 
+function createFile1() {
+  console.log('create file');
+}
+
 function test() {
   console.log("Hello, World!");
 }

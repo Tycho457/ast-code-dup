@@ -20,8 +20,7 @@
   },
   "homepage": "https://github.com/Tycho457/ast-code-dup#readme",
   "dependencies": {
-    "@typescript-eslint/parser": "^7.16.1",
-    "escodegen": "^2.1.0",
-    "esprima": "^4.0.1"
+    "@babel/generator": "^7.24.10",
+    "@babel/parser": "^7.24.8",
   }
 }

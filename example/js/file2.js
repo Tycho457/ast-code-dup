@@ -6,6 +6,7 @@ const init = () => {
 
 function createFile() {
   console.log('create file');
+  // 注释测试
 }
 
 function test() {

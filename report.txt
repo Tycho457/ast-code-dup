@@ -1,0 +1,54 @@
+发现重复函数（6 次）：
+  文件: example/js/file1.js, 行 3 - 行 5
+  文件: example/js/file2.js, 行 3 - 行 5
+  文件: example/js/file3.js, 行 3 - 行 5
+  文件: example/js copy/file1.js, 行 3 - 行 5
+  文件: example/js copy/file2.js, 行 3 - 行 5
+  文件: example/js copy/file3.js, 行 3 - 行 5
+代码片段:
+ () => {
+  console.log('file init');
+}
+
+发现重复函数（6 次）：
+  文件: example/js/file1.js, 行 7 - 行 9
+  文件: example/js/file2.js, 行 7 - 行 10
+  文件: example/js/file3.js, 行 11 - 行 13
+  文件: example/js copy/file1.js, 行 7 - 行 9
+  文件: example/js copy/file2.js, 行 7 - 行 9
+  文件: example/js copy/file3.js, 行 7 - 行 9
+代码片段:
+function createFile() {
+  console.log('create file');
+}
+
+发现重复函数（6 次）：
+  文件: example/js/file1.js, 行 15 - 行 17
+  文件: example/js/file2.js, 行 12 - 行 14
+  文件: example/js/file3.js, 行 7 - 行 9
+  文件: example/js copy/file1.js, 行 11 - 行 13
+  文件: example/js copy/file2.js, 行 11 - 行 13
+  文件: example/js copy/file3.js, 行 11 - 行 13
+代码片段:
+function test() {
+  console.log("Hello, World!");
+}
+
+发现重复函数（3 次）：
+  文件: example/ts/file1.ts, 行 1 - 行 3
+  文件: example/ts/file2.ts, 行 1 - 行 3
+  文件: example/ts/file3.ts, 行 1 - 行 3
+代码片段:
+ function add(a: number, b: number): number {
+  return a + b;
+}
+
+发现重复函数（3 次）：
+  文件: example/ts/file1.ts, 行 5 - 行 7
+  文件: example/ts/file2.ts, 行 5 - 行 7
+  文件: example/ts/file3.ts, 行 5 - 行 7
+代码片段:
+ function subtract(a: number, b: number): number {
+  return a - b;
+}
+
